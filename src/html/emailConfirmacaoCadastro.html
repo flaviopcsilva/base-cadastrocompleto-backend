@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- <link rel="stylesheet" href="estilos.css"> -->
+
+    <title>Document</title>
+    <style>
+        h1 {
+            margin: 10px;
+            color: red;
+            text-decoration: underline;
+            text-align: center;
+        }
+
+
+
+        .corpo {
+            text-align: center;
+        }
+
+        .corpo p {
+            margin: 10px;
+            font-size: 18px;
+        }
+
+        .destaque {
+            color: red;
+            font-size: 24px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Verificação de Cadastro</h1>
+
+    <span class="corpo">
+        <p>Olá {{cliente}}</p>
+
+        Seu código de verificação é <span class="destaque">{{codigo}}</span>, por favor, confirme para realizar o
+        cadastro.
+
+
+    </span>
+
+
+</body>
+
+</html>
