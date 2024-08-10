@@ -64,6 +64,7 @@ const cadastrarCliente = async (req, res) => {
         const { logradouro, bairro, localidade, uf } = endereco;
 
         const codigoConfirmacao = gerarCodigoConfirmacao();
+        console.log(nome);
 
         // Armazene temporariamente o código de confirmação e os dados do cliente
         await knex('confirmacoes').insert({
@@ -84,7 +85,7 @@ const cadastrarCliente = async (req, res) => {
         });
 
         // Enviar SMS de confirmação
-        await enviarSMSConfirmacao(telefoneFormatado, codigoConfirmacao);
+        // await enviarSMSConfirmacao(telefoneFormatado, codigoConfirmacao);
         //enviar email de confirmação
         const variaveisEmail = {
             cliente: nome,
@@ -168,11 +169,34 @@ const confirmarCadastro = async (req, res) => {
 };
 
 const excluirCliente = async (req, res) => {
+    const { email } = req.body
 
     try {
 
-    } catch (error) {
+        if (!email) {
+            return res.status(400).json({ mensagem: 'Campo email não pode ser em branco!' })
+        }
+        const clienteExiste = await knex('clientes')
+            .where({ email: email })
+            .first()
 
+        if (!clienteExiste) {
+            return res.status(404).json({ mensagem: 'Cliente não existe!' })
+        }
+
+        const resultadoExclusao = await knex('clientes')
+            .where({ email: email })
+            .del()
+
+        // Verifique se a exclusão foi bem-sucedida (resultadoExclusao > 0)
+        if (resultadoExclusao > 0) {
+            return res.status(200).json({ Mensagem: `Cliente ${clienteExiste.nome} foi excluido.` });
+        } else {
+            return res.status(500).json({ Mensagem: 'Erro ao excluir o cliente' });
+        }
+
+    } catch (error) {
+        return res.status(500).json({ mensagem: `Erro interno do servidor na rota de exclusão: ${error.message}` })
     }
 }
 
