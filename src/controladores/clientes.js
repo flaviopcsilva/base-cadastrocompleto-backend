@@ -14,10 +14,26 @@ const { response } = require("../rotas")
 
 
 const listarClientes = async (req, res) => {
-    const clientes = await knex('clientes')
+    const { page = 1, limit = 5 } = req.query; // Parâmetros de paginação
 
-    return res.status(200).json(clientes)
+    try {
+        const clientes = await knex('clientes')
+            .limit(limit)
+            .offset((page - 1) * limit); // Calcular o offset
+
+        const totalClientes = await knex('clientes').count('* as count').first(); // Contar o total de clientes
+
+        return res.status(200).json({
+            data: clientes,
+            total: totalClientes.count,
+            page: parseInt(page),
+            totalPages: Math.ceil(totalClientes.count / limit)
+        });
+    } catch (error) {
+        return res.status(500).json({ Mensagem: `Erro ao listar clientes: ${error.message}` });
+    }
 }
+
 
 const cadastrarCliente = async (req, res) => {
     const { cep, nome, senha, email, cpf, data_de_nascimento, numero, complemento, telefone } = req.body
@@ -249,6 +265,10 @@ const buscarCPF = async (req, res) => {
             if (dadosPessoais.message === 'Parametro Invalido.') {
                 console.log('verdadeiro3');
                 return res.status(400).json({ Mensagem: 'CPF Inválido' });
+            }
+            if (dadosPessoais.message === 'Token Inválido ou sem saldo para a consulta.') {
+                console.log('verdadeiro4');
+                return res.status(401).json({ Mensagem: 'Token Inválido ou sem saldo para a consulta.' });
             }
 
 
