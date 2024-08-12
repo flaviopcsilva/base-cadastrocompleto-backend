@@ -8,7 +8,7 @@ const cors = require('cors')
 
 
 const corsOptions = {
-    origin: ['https://painel-transporthos.vercel.app', 'https://painel-transporthos.vercel.app/enviar-pdf', 'http://localhost:4200'], // Substitua pelo seu domínio frontend
+    origin: ['https://cadastro-basico.vercel.app', 'http://localhost:4200'], // Substitua pelo seu domínio frontend
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
     optionsSuccessStatus: 200,
