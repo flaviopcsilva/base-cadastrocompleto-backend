@@ -33,7 +33,7 @@ const listarClientes = async (req, res) => {
         const clientes = await knex('clientes')
         return res.status(200).json(clientes)
     } catch (error) {
-        return res.status(500).json({ Mensagem: `Erro ao listar clientes: ${error.message}` });
+        return res.status(500).json({ mensagem: `Erro ao listar clientes: ${error.message}` });
     }
 }
 
@@ -41,12 +41,12 @@ const listarClientes = async (req, res) => {
 const cadastrarCliente = async (req, res) => {
     const { cep, nome, senha, email, cpf, data_de_nascimento, numero, complemento, telefone } = req.body
     if (!cep || !nome || !email || !cpf || !data_de_nascimento || !numero || !complemento || !telefone || !senha) {
-        return res.status(400).json({ Mensagem: 'Campos não pode ficar em Branco' })
+        return res.status(400).json({ mensagem: 'Campos não pode ficar em Branco' })
     }
 
     // Validar formato do CPF
     if (!validarCPF(cpf)) {
-        return res.status(404).json({ error: 'CPF inválido.' });
+        return res.status(404).json({ mensagem: 'CPF inválido.' });
     }
 
     // Formatar data de nascimento para o formato correto
@@ -67,14 +67,14 @@ const cadastrarCliente = async (req, res) => {
             .first()
 
         if (emailExiste) {
-            return res.status(400).json({ Mensagem: 'Email já cadastrado!' })
+            return res.status(400).json({ mensagem: 'Email já cadastrado!' })
         }
 
         const cpfExiste = await knex('clientes')
             .where({ cpf: cpfFormatado })
             .first()
         if (cpfExiste) {
-            return res.status(400).json({ Mensagem: 'CPF já cadastrado!' })
+            return res.status(400).json({ mensagem: 'CPF já cadastrado!' })
         }
 
 
@@ -117,12 +117,12 @@ const cadastrarCliente = async (req, res) => {
 
         confirmacaoDeCadastroCliente(email, corpoDoEmailRenderizado);
 
-        return res.status(200).json({ Mensagem: 'Código de confirmação enviado para o email.' });
+        return res.status(200).json({ mensagem: 'Código de confirmação enviado para o email.' });
 
 
 
     } catch (error) {
-        return res.status(500).json({ Mensagem: `Erro na rota de Cadastro de Clientes: ${error.message}` })
+        return res.status(500).json({ mensagem: `Erro na rota de Cadastro de Clientes: ${error.message}` })
     }
 
 }
@@ -131,14 +131,14 @@ const confirmarCadastro = async (req, res) => {
     const { email, codigo } = req.body;
 
     if (!email || !codigo) {
-        return res.status(400).json({ Mensagem: 'Campos não pode ficar em branco!' })
+        return res.status(400).json({ mensagem: 'Campos não pode ficar em branco!' })
     }
 
     try {
         const confirmacao = await knex('confirmacoes').where({ email, codigo }).first();
 
         if (!confirmacao) {
-            return res.status(400).json({ Mensagem: 'Código de confirmação ou email inválido.' });
+            return res.status(400).json({ mensagem: 'Código de confirmação ou email inválido.' });
         }
 
         // Movendo dados para a tabela de clientes
@@ -181,9 +181,9 @@ const confirmarCadastro = async (req, res) => {
 
         cadastradoComSucesso(email, corpoDoEmailRenderizado)
 
-        return res.status(201).json({ Mensagem: 'Cadastro confirmado com sucesso.', clientenovo });
+        return res.status(201).json({ mensagem: 'Cadastro confirmado com sucesso.', clientenovo });
     } catch (error) {
-        return res.status(500).json({ Mensagem: `Erro na confirmação do cadastro: ${error.message}` });
+        return res.status(500).json({ mensagem: `Erro na confirmação do cadastro: ${error.message}` });
     }
 };
 
@@ -209,9 +209,9 @@ const excluirCliente = async (req, res) => {
 
         // Verifique se a exclusão foi bem-sucedida (resultadoExclusao > 0)
         if (resultadoExclusao > 0) {
-            return res.status(200).json({ Mensagem: `Cliente ${clienteExiste.nome} foi excluido.` });
+            return res.status(200).json({ mensagem: `Cliente ${clienteExiste.nome} foi excluido.` });
         } else {
-            return res.status(500).json({ Mensagem: 'Erro ao excluir o cliente' });
+            return res.status(500).json({ mensagem: 'Erro ao excluir o cliente' });
         }
 
     } catch (error) {
@@ -263,15 +263,15 @@ const buscarCPF = async (req, res) => {
             console.log('verdadeiro 1');
             if (dadosPessoais.message === 'Data Nascimento invalida.') {
                 console.log('verdadeiro2');
-                return res.status(400).json({ Mensagem: 'Data de Nascimento Inválida.' });
+                return res.status(400).json({ mensagem: 'Data de Nascimento Inválida.' });
             }
             if (dadosPessoais.message === 'Parametro Invalido.') {
                 console.log('verdadeiro3');
-                return res.status(400).json({ Mensagem: 'CPF Inválido' });
+                return res.status(400).json({ mensagem: 'CPF Inválido' });
             }
             if (dadosPessoais.message === 'Token Inválido ou sem saldo para a consulta.') {
                 console.log('verdadeiro4');
-                return res.status(401).json({ Mensagem: 'Token Inválido ou sem saldo para a consulta.' });
+                return res.status(401).json({ mensagem: 'Token Inválido ou sem saldo para a consulta.' });
             }
 
 
@@ -284,7 +284,7 @@ const buscarCPF = async (req, res) => {
         return res.status(200).json(dados)
 
     } catch (error) {
-        return res.status(500).json({ Mensagem: `Erro interno do servidor na rota buscarCPF: ${error.message}` })
+        return res.status(500).json({ mensagem: `Erro interno do servidor na rota buscarCPF: ${error.message}` })
     }
 
 }
