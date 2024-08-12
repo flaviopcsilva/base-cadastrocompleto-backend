@@ -188,7 +188,7 @@ const confirmarCadastro = async (req, res) => {
 };
 
 const excluirCliente = async (req, res) => {
-    const { email } = req.body
+    const { email } = req.params
 
     try {
 

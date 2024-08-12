@@ -16,7 +16,7 @@ rotas.post('/cadastro', confirmarCadastro)
 // rotas.use(verificarToken)
 rotas.get('/clientes', listarClientes)
 
-rotas.delete('/clientes', excluirCliente)
+rotas.delete('/cliente/:email', excluirCliente)
 
 rotas.get('/buscarcpf', buscarCPF)
 
