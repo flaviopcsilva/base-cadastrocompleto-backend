@@ -14,21 +14,24 @@ const { response } = require("../rotas")
 
 
 const listarClientes = async (req, res) => {
-    const { page = 1, limit = 5 } = req.query; // Parâmetros de paginação
+    // const { page = 1, limit = 5 } = req.query; // Parâmetros de paginação
 
     try {
+        // const clientes = await knex('clientes')
+        //     .limit(limit)
+        //     .offset((page - 1) * limit); // Calcular o offset
+
+        // const totalClientes = await knex('clientes').count('* as count').first(); // Contar o total de clientes
+
+        // return res.status(200).json({
+        //     data: clientes,
+        //     total: totalClientes.count,
+        //     page: parseInt(page),
+        //     totalPages: Math.ceil(totalClientes.count / limit)
+        // });
+
         const clientes = await knex('clientes')
-            .limit(limit)
-            .offset((page - 1) * limit); // Calcular o offset
-
-        const totalClientes = await knex('clientes').count('* as count').first(); // Contar o total de clientes
-
-        return res.status(200).json({
-            data: clientes,
-            total: totalClientes.count,
-            page: parseInt(page),
-            totalPages: Math.ceil(totalClientes.count / limit)
-        });
+        return res.status(200).json(clientes)
     } catch (error) {
         return res.status(500).json({ Mensagem: `Erro ao listar clientes: ${error.message}` });
     }

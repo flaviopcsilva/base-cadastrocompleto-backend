@@ -13,7 +13,7 @@ rotas.post('/login', crialogin)
 rotas.post('/clientes', cadastrarCliente)
 rotas.post('/cadastro', confirmarCadastro)
 
-rotas.use(verificarToken)
+// rotas.use(verificarToken)
 rotas.get('/clientes', listarClientes)
 
 rotas.delete('/clientes', excluirCliente)
